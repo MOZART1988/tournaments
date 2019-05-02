@@ -3,10 +3,11 @@
  * Created by PhpStorm.
  * User: ivan
  * Date: 02.05.19
- * Time: 10:27
+ * Time: 13:41
  */
 
-namespace Tournament;
+namespace Entity;
+
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;

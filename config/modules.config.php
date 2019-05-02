@@ -14,5 +14,6 @@ return [
     'Zend\Router',
     'Zend\Validator',
     'Application',
-    'Tournament'
+    'Entity',
+    'Tournament',
 ];
