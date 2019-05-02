@@ -8,9 +8,10 @@
 
 namespace Entity;
 
-
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 class Module implements ConfigProviderInterface, ServiceProviderInterface
 {
@@ -23,6 +24,11 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
 
     public function getServiceConfig()
     {
-        return [];
+        return [
+            'factories' => [
+                MysqlMapper::class => InvokableFactory::class,
+                Team::class => InvokableFactory::class,
+            ]
+        ];
     }
 }
