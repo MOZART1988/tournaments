@@ -16,7 +16,17 @@
  */
 
 return [
-    'view_manager' => [
-        'display_exceptions' => true,
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'driverClass' => Doctrine\DBAL\Driver\PDOMySql\Driver::class,
+                'params' => [
+                    'host'     => 'localhost',
+                    'user'     => 'root',
+                    'password' => '',
+                    'dbname'   => 'tournaments',
+                ]
+            ],
+        ],
     ],
 ];

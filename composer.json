@@ -24,20 +24,20 @@
         "zendframework/zend-mvc-plugins": "^1.0.1",
         "zendframework/zend-psr7bridge": "^0.2.2",
         "zendframework/zend-session": "^2.7.1",
-        "zendframework/zend-servicemanager-di": "^1.0"
+        "zendframework/zend-servicemanager-di": "^1.0",
+        "doctrine/doctrine-orm-module": "^2.1",
+        "doctrine/migrations": "^2.0"
     },
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
-            "Tournament\\": "module/Tournament/src",
-            "Entity\\": "module/Entity/src"
+            "Tournament\\": "module/Tournament/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "ApplicationTest\\": "module/Application/test/",
-            "TournamentTest\\": "module/Tournament/test/",
-            "EntityTest\\": "module/Entity/test"
+            "TournamentTest\\": "module/Tournament/test/"
         }
     },
     "extra": [],
