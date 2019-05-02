@@ -10,6 +10,7 @@ namespace Tournament;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Db\Adapter;
 
 class Module implements ConfigProviderInterface, ServiceProviderInterface
 {
@@ -22,6 +23,11 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
 
     public function getServiceConfig()
     {
-        return [];
+        return [
+            Adapter\Adapter::class => function($container) {
+                $config = $container->get('config');
+                return new Adapter\Adapter($config['db']);
+            }
+        ];
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Application\Entity;
+namespace Tournament\Entity;
 /**
  * This class represents a team in a tournament.
  * @ORM\Entity(repositoryClass="\Tournament\Repository\TeamRepository")
