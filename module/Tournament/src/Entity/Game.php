@@ -11,7 +11,7 @@ namespace Tournament\Entity;
 /**
  * This class represents a game entity in a tournament.
  * @ORM\Entity(repositoryClass="\Tournament\Repository\GameRepository")
- * @ORM\Table(name="tournament")
+ * @ORM\Table(name="game")
  */
 class Game
 {
