@@ -8,6 +8,7 @@
 return [
     // Additional modules to include when in development mode
     'modules' => [
+        'Zend\Paginator',
         'Zend\InputFilter',
         'Zend\Filter',
         'Zend\Hydrator',
@@ -23,6 +24,8 @@ return [
         'Zend\Db',
         'Zend\Cache',
         'ZendDeveloperTools',
+        'DoctrineModule',
+        'DoctrineORMModule',
     ],
     // Configuration overrides during development mode
     'module_listener_options' => [
