@@ -13,6 +13,7 @@
 return [
     'Zend\Router',
     'Zend\Validator',
-    'Tournament',
     'Application',
+    'Entity',
+    'Tournament',
 ];

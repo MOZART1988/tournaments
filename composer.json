@@ -29,12 +29,15 @@
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
-            "Tournament\\": "module/Tournament/src"
+            "Tournament\\": "module/Tournament/src",
+            "Entity\\": "module/Entity/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ApplicationTest\\": "module/Application/test/"
+            "ApplicationTest\\": "module/Application/test/",
+            "TournamentTest\\": "module/Tournament/test/",
+            "EntityTest\\": "module/Entity/test"
         }
     },
     "extra": [],
