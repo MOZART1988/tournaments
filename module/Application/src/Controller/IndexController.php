@@ -7,15 +7,30 @@
 
 namespace Application\Controller;
 
+use Doctrine\ORM\EntityManager;
+use Tournament\Entity\Game;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+    /**
+     * @var EntityManager
+    */
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
     public function indexAction()
     {
+        $game = $this->entityManager->getRepository(Game::class)
+            ->findBy(['id' => 1]);
 
-        return new ViewModel();
+        return new ViewModel([
+            'game' => $game
+        ]);
     }
 }
