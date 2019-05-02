@@ -8,6 +8,7 @@
 namespace Application;
 
 use Application\Controller\Factories\IndexControllerFactory;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 
@@ -56,5 +57,5 @@ return [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
-    ],
+    ]
 ];

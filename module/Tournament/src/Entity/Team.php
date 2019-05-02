@@ -1,5 +1,8 @@
 <?php
+
 namespace Tournament\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a team in a tournament.
  * @ORM\Entity(repositoryClass="\Tournament\Repository\TeamRepository")

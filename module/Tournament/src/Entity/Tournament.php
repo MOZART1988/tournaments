@@ -8,6 +8,8 @@
 
 namespace Tournament\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * This class represents a tournament entity in a tournament.
  * @ORM\Entity(repositoryClass="\Tournament\Repository\TournamentRepository")
