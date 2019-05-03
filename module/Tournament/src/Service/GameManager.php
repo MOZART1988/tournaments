@@ -46,8 +46,6 @@ class GameManager
         $game->setStageId($data['stageId']);
         $game->setFirstTeamId($data['firstTeamId']);
         $game->setSecondTeamId($data['secondTeamId']);
-        $game->setFirstTeam($data['firstTeam']);
-        $game->setSecondTeam($data['secondTeam']);
         $game->setFirstTeamScore(random_int(0, 10));
         $game->setSecondTeamScore(random_int(0, 10));
 
@@ -90,14 +88,13 @@ class GameManager
                     $data = [
                         'tournamentId' => $tournamentId,
                         'stageId' => self::STAGE_GROUP,
-                        'firstTeamId' => $item->getTeamId(),
-                        'secondTeamId' => $versusTeam->getTeamId(),
+                        'firstTeamId' => (int)$item->getTeamId(),
+                        'secondTeamId' => (int)$versusTeam->getTeamId(),
                         'firstTeam' => $item,
                         'secondTeam' => $versusTeam
                     ];
 
                     $this->playGame($this->addGame($data));
-
                 }
 
             }
@@ -106,8 +103,10 @@ class GameManager
 
     public function playGame(Game $game)
     {
-        $firstTeam = $game->getFirstTeam();
-        $secondTeam = $game->getSecondTeam();
+        $firstTeam = $this->entityManager->getRepository(TeamTournament::class)
+        ->findOneBy(['team_id' => $game->getFirstTeamId()]);
+        $secondTeam = $this->entityManager->getRepository(TeamTournament::class)
+        ->findOneBy(['team_id' => $game->getSecondTeamId()]);
 
         /**
          * @var TeamTournament $firstTeam
