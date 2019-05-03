@@ -17,7 +17,7 @@ use Tournament\Entity\Tournament;
 class TournamentManager
 {
     /**
-     * List of Groups
+     * List of Divisions
      * @var array $divisions
     */
 
