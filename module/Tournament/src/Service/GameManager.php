@@ -77,8 +77,30 @@ class GameManager
 
     public function playGame(Game $game)
     {
+        $firstTeam = $game->getFirstTeam();
+        $secondTeam = $game->getSecondTeam();
+
+        /**
+         * @var TeamTournament $firstTeam
+         * @var TeamTournament $secondTeam
+         */
+
         if ($game->getFirstTeamScore() > $game->getSecondTeamScore()) {
-            
+            $firstTeam->setFinalScore($firstTeam->getFinalScore() + 3);
         }
+
+        if ($game->getFirstTeamScore() < $game->getSecondTeamScore()) {
+            $secondTeam->setFinalScore($secondTeam->getFinalScore() + 3);
+        }
+
+        if ($game->getFirstTeamScore() === $game->getSecondTeamScore()) {
+            $firstTeam->setFinalScore($firstTeam->getFinalScore() + 1);
+            $secondTeam->setFinalScore($secondTeam->getFinalScore() + 1);
+        }
+
+        $this->entityManager->persist($firstTeam);
+        $this->entityManager->persist($secondTeam);
+
+        $this->entityManager->flush();
     }
 }
