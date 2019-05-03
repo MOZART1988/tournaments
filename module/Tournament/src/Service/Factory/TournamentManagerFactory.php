@@ -10,6 +10,7 @@ namespace Tournament\Service\Factory;
 
 
 use Interop\Container\ContainerInterface;
+use Tournament\Service\TournamentManager;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 class TournamentManagerFactory implements FactoryInterface
@@ -17,5 +18,7 @@ class TournamentManagerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
+
+        return new TournamentManager($entityManager);
     }
 }

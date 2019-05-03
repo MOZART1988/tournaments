@@ -9,6 +9,8 @@ namespace Application\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Tournament\Entity\Game;
+use Tournament\Form\AddTournamentForm;
+use Tournament\Service\TournamentManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -19,18 +21,38 @@ class IndexController extends AbstractActionController
     */
     private $entityManager;
 
-    public function __construct(EntityManager $entityManager)
+    /**
+     * @var TournamentManager
+    */
+    private $tournamentManager;
+
+    public function __construct(EntityManager $entityManager, TournamentManager $tournamentManager)
     {
         $this->entityManager = $entityManager;
+        $this->tournamentManager = $tournamentManager;
     }
 
     public function indexAction()
     {
-        $game = $this->entityManager->getRepository(Game::class)
-            ->findBy(['id' => 1]);
+        $form = new AddTournamentForm();
+
+        if ($this->request->isPost()) {
+            $data = $this->params()->fromPost();
+
+            $form->setData($data);
+
+            if ($form->isValid()) {
+
+                $data = $form->getData();
+                $this->tournamentManager->addNewTournament($data);
+
+                return $this->redirect()->toRoute('application');
+
+            }
+        }
 
         return new ViewModel([
-            'game' => $game
+            'form' => $form
         ]);
     }
 }
