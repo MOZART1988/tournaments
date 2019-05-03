@@ -97,6 +97,8 @@ class TournamentManager
             $this->generateTeams(self::$teams);
         }
 
+        $this->generateGroups($tournament->getId());
+
     }
 
     public function deleteTournament($id) : void
@@ -107,6 +109,40 @@ class TournamentManager
         if ($tournament) {
             $this->entityManager->remove($tournament);
             $this->entityManager->flush();
+        }
+    }
+
+    public function generateGroups($tournamentId)
+    {
+        $teams = $this->entityManager->getRepository(Team::class)->findAll();
+
+        $result = [];
+
+        foreach ($teams as $team) {
+            $result[] = $team->getId();
+        }
+
+        shuffle($result);
+
+        $counter = 1;
+        $currentGroup = self::GROUP_A;
+
+        foreach ($result as $teamId) {
+
+            $teamTournament = new TeamTournament();
+
+            $teamTournament->setTeamId($teamId);
+            $teamTournament->setGroupId($currentGroup);
+            $teamTournament->setTournamentId($tournamentId);
+
+            $this->entityManager->persist($teamTournament);
+            $this->entityManager->flush();
+
+            if ($counter % 4 === 0) {
+                $currentGroup++;
+            }
+
+            $counter++;
         }
     }
 }
