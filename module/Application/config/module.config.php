@@ -7,9 +7,12 @@
 
 namespace Application;
 
+use Application\Controller\Factories\IndexControllerFactory;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Tournament\Service\Factory\TournamentManagerFactory;
+use Tournament\Service\TournamentManager;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -38,8 +41,11 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            Controller\IndexController::class => IndexControllerFactory::class
         ],
+    ],
+    'services' => [
+        TournamentManager::class => TournamentManagerFactory::class,
     ],
     'view_manager' => [
         'display_not_found_reason' => true,
@@ -56,5 +62,5 @@ return [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
-    ],
+    ]
 ];
