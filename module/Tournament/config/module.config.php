@@ -8,7 +8,9 @@
 namespace Tournament;
 
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Tournament\Service\Factory\GameManagerFactory;
 use Tournament\Service\Factory\TournamentManagerFactory;
+use Tournament\Service\GameManager;
 use Tournament\Service\TournamentManager;
 use Zend\Router\Http\Segment;
 
@@ -29,7 +31,8 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            TournamentManager::class => TournamentManagerFactory::class
+            TournamentManager::class => TournamentManagerFactory::class,
+            GameManager::class => GameManagerFactory::class,
         ]
     ],
     'router' => [

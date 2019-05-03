@@ -48,7 +48,7 @@ class TeamTournament
      * @ORM\ManyToOne(targetEntity="Tournament\Entity\Team", inversedBy="team")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      */
-    protected $team;
+    protected $team = null;
 
     /**
      * Returns ID
@@ -128,6 +128,15 @@ class TeamTournament
     public function getTeam()
     {
         return $this->team;
+    }
+
+    /**
+     * Sets associated team.
+     * @param Team $team
+     */
+    public function setTeam($team)
+    {
+        $this->team = $team;
     }
 
     /**

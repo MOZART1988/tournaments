@@ -19,7 +19,8 @@ class TeamRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         return $queryBuilder->select('t')
-            ->from(Team::class, 't')->where("t.id <> $id")
+            ->from(Team::class, 't')
+            ->where("t.id <> $id")
             ->getQuery()->getResult();
     }
 }

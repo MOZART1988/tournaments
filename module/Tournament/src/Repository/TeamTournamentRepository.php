@@ -25,4 +25,15 @@ class TeamTournamentRepository extends EntityRepository
             ->setMaxResults(4)
             ->getQuery()->getResult();
     }
+
+    public function findVersusTeams($teamId, $groupId)
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        return $queryBuilder->select('t')
+            ->from(TeamTournament::class, 't')
+            ->where("t.team_id <> $teamId")
+            ->andWhere("t.group_id=$groupId")
+            ->getQuery()->getResult();
+    }
 }

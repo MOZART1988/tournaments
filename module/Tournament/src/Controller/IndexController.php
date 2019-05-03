@@ -12,6 +12,7 @@ namespace Tournament\Controller;
 use Doctrine\ORM\EntityManager;
 use Tournament\Entity\TeamTournament;
 use Tournament\Entity\Tournament;
+use Tournament\Service\GameManager;
 use Tournament\Service\TournamentManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -28,10 +29,18 @@ class IndexController extends AbstractActionController
      */
     private $tournamentManager;
 
-    public function __construct(EntityManager $entityManager, TournamentManager $tournamentManager)
+
+    /**
+     * @var GameManager $gameManager
+    */
+
+    private $gameManager;
+
+    public function __construct(EntityManager $entityManager, TournamentManager $tournamentManager, GameManager $gameManager)
     {
         $this->entityManager = $entityManager;
         $this->tournamentManager = $tournamentManager;
+        $this->gameManager = $gameManager;
     }
 
     public function indexAction()
@@ -51,5 +60,16 @@ class IndexController extends AbstractActionController
                 ->findBy(['tournament_id' => $tournament->getId(), 'group_id' => TournamentManager::DIVISION_2]),
             'tournament' => $tournament,
         ]);
+    }
+
+    public function startAction()
+    {
+        $id = $this->params()->fromRoute('id', -1);
+
+        $this->gameManager->generateGameTable($id, 1);
+        $this->gameManager->generateGameTable($id, 2);
+
+        echo 1;
+        die;
     }
 }

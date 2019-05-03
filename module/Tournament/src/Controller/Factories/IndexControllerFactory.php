@@ -11,6 +11,7 @@ namespace Tournament\Controller\Factories;
 
 use Tournament\Controller\IndexController;
 use Interop\Container\ContainerInterface;
+use Tournament\Service\GameManager;
 use Tournament\Service\TournamentManager;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -20,7 +21,8 @@ class IndexControllerFactory implements FactoryInterface
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $tournamentManager = $container->get(TournamentManager::class);
+        $gameManager = $container->get(GameManager::class);
 
-        return new IndexController($entityManager, $tournamentManager);
+        return new IndexController($entityManager, $tournamentManager, $gameManager);
     }
 }

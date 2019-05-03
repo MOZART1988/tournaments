@@ -41,9 +41,13 @@ class GameManager
         $game = new Game();
 
         $game->setTournamentId($data['tournamentId']);
+        $game->setTitle('test');
+        $game->setCreatedAt(date('Y-m-d H:i:s'));
         $game->setStageId($data['stageId']);
         $game->setFirstTeamId($data['firstTeamId']);
         $game->setSecondTeamId($data['secondTeamId']);
+        $game->setFirstTeam($data['firstTeam']);
+        $game->setSecondTeam($data['secondTeam']);
         $game->setFirstTeamScore(random_int(0, 10));
         $game->setSecondTeamScore(random_int(0, 10));
 
@@ -64,24 +68,36 @@ class GameManager
              * @var TeamTournament $item
              */
 
-            $versusTeams = $this->entityManager->getRepository(Team::class)
-                ->findVersusTeams($item->getTeamId());
+            $versusTeams = $this->entityManager->getRepository(TeamTournament::class)
+                ->findVersusTeams($item->getTeamId(), $divisionId);
 
 
             if (!empty($versusTeams)) {
                 foreach ($versusTeams as $versusTeam) {
                     /**
-                     * @var Team $versusTeam
+                     * @var TeamTournament $versusTeam
                      */
+
+                    if ( $item->getTeamId() == $versusTeam->getTeamId() ) {
+                        continue;
+                    }
+
+                    if (!empty($this->entityManager->getRepository(Game::class)
+                    ->findExists($item->getTeamId(), $versusTeam->getTeamId()))) {
+                        continue;
+                    }
 
                     $data = [
                         'tournamentId' => $tournamentId,
                         'stageId' => self::STAGE_GROUP,
                         'firstTeamId' => $item->getTeamId(),
-                        'secondTeamId' => $versusTeam->getId(),
+                        'secondTeamId' => $versusTeam->getTeamId(),
+                        'firstTeam' => $item,
+                        'secondTeam' => $versusTeam
                     ];
 
                     $this->playGame($this->addGame($data));
+
                 }
 
             }

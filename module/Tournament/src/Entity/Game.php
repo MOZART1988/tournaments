@@ -247,11 +247,29 @@ class Game
     }
 
     /**
+     * Sets associated TeamTournament.
+     * @param TeamTournament $team
+     */
+    public function setFirstTeam($team)
+    {
+        $this->firstTeam = $team;
+    }
+
+    /**
      * Returns assosiated team entity
      */
     public function getSecondTeam()
     {
         return $this->secondTeam;
+    }
+
+    /**
+     * Sets associated TeamTournament.
+     * @param TeamTournament $team
+     */
+    public function setSecondTeam($team)
+    {
+        $this->secondTeam = $team;
     }
 
 }

@@ -87,7 +87,6 @@ class TournamentManager
         $tournament->setCreatedAt(date('Y-m-d H:i:s'));
 
         $this->entityManager->persist($tournament);
-
         $this->entityManager->flush();
 
         if (!$this->entityManager->getRepository(Team::class)->findBy([])) {
@@ -95,6 +94,8 @@ class TournamentManager
         }
 
         $this->generateDivisions($tournament->getId());
+
+
 
     }
 
@@ -125,21 +126,25 @@ class TournamentManager
         $result = [];
 
         foreach ($teams as $team) {
-            $result[] = $team->getId();
+            $result[] = $team;
         }
 
         shuffle($result);
 
+
         $counter = 1;
         $currentGroup = self::DIVISION_1;
 
-        foreach ($result as $teamId) {
+        foreach ($result as $team) {
 
             $teamTournament = new TeamTournament();
 
-            $teamTournament->setTeamId($teamId);
+            $teamTournament->setTeamId($team->getId());
+
             $teamTournament->setGroupId($currentGroup);
             $teamTournament->setTournamentId($tournamentId);
+            $teamTournament->setFinalScore(0);
+            $teamTournament->setTeam($team);
 
             $this->entityManager->persist($teamTournament);
 
@@ -148,6 +153,8 @@ class TournamentManager
             }
 
             $counter++;
+
+
         }
 
         $this->entityManager->flush();
