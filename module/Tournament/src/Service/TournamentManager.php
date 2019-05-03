@@ -32,5 +32,7 @@ class TournamentManager
         $tournament->setCreatedAt(date('Y-m-d H:i:s'));
 
         $this->entityManager->persist($tournament);
+
+        $this->entityManager->flush();
     }
 }

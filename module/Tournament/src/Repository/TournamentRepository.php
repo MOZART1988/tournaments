@@ -9,7 +9,9 @@
 namespace Tournament\Repository;
 
 
-class TournamentRepository
+use Doctrine\ORM\EntityRepository;
+
+class TournamentRepository extends EntityRepository
 {
 
 }
