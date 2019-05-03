@@ -18,19 +18,16 @@ class TournamentManager
 {
     /**
      * List of Groups
-     * @var array $groups
+     * @var array $divisions
     */
 
-    const GROUP_A = 1;
-    const GROUP_B = 2;
-    const GROUP_C = 3;
-    const GROUP_D = 4;
+    const DIVISION_1 = 1;
+    const DIVISION_2 = 2;
 
-    public static $groups = [
-        self::GROUP_A => 'А',
-        self::GROUP_B => 'B',
-        self::GROUP_C => 'C',
-        self::GROUP_D => 'D'
+
+    public static $divisions = [
+        self::DIVISION_1 => 'Upper division',
+        self::DIVISION_2 => 'Lower division'
     ];
 
     /**
@@ -77,9 +74,9 @@ class TournamentManager
 
 
             $this->entityManager->persist($team);
-
-            $this->entityManager->flush();
         }
+
+        $this->entityManager->flush();
     }
 
 
@@ -97,7 +94,7 @@ class TournamentManager
             $this->generateTeams(self::$teams);
         }
 
-        $this->generateGroups($tournament->getId());
+        $this->generateDivisions($tournament->getId());
 
     }
 
@@ -107,12 +104,21 @@ class TournamentManager
             ->findOneBy(['id' => $id]);
 
         if ($tournament) {
+
+            $tournamentTeams = $this->entityManager->getRepository(TeamTournament::class)
+                ->findBy(['tournament_id' => $tournament->getId()]);
+
+            foreach ($tournamentTeams as $tournamentTeam) {
+                $this->entityManager->remove($tournamentTeam);
+            }
+
             $this->entityManager->remove($tournament);
-            $this->entityManager->flush();
         }
+
+        $this->entityManager->flush();
     }
 
-    public function generateGroups($tournamentId)
+    public function generateDivisions($tournamentId)
     {
         $teams = $this->entityManager->getRepository(Team::class)->findAll();
 
@@ -125,7 +131,7 @@ class TournamentManager
         shuffle($result);
 
         $counter = 1;
-        $currentGroup = self::GROUP_A;
+        $currentGroup = self::DIVISION_1;
 
         foreach ($result as $teamId) {
 
@@ -136,13 +142,14 @@ class TournamentManager
             $teamTournament->setTournamentId($tournamentId);
 
             $this->entityManager->persist($teamTournament);
-            $this->entityManager->flush();
 
-            if ($counter % 4 === 0) {
+            if ($counter % 8 === 0) {
                 $currentGroup++;
             }
 
             $counter++;
         }
+
+        $this->entityManager->flush();
     }
 }

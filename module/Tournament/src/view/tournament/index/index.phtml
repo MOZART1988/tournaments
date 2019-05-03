@@ -1,0 +1,86 @@
+<?php
+/**
+ * @var \Tournament\Entity\TeamTournament[] $divisionOneItems
+ * @var \Tournament\Entity\TeamTournament[] $divisionTwoItems
+ * @var \Tournament\Entity\Tournament $tournament
+*/
+
+?>
+
+<h1>Tournament <?=$tournament->getTitle()?></h1>
+
+
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-striped">
+
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Created At</th>
+            </tr>
+
+            <?php foreach ($tournaments as $tournament): ?>
+
+                <tr>
+                    <td><?= $this->escapeHtml($tournament->getId()); ?></td>
+                    <td><?= $this->escapeHtml($tournament->getTitle()); ?></td>
+                    <td><?= $this->escapeHtml($tournament->getCreatedAt()); ?></td>
+                    <td>
+                        <a class="btn btn-success" href="<?= $this->url('application',
+                            ['action'=>'start', 'id'=>$tournament->getId()]); ?>">
+                            <span class="glyphicon glyphicon-star"></span> Start tournament
+                        </a>
+                    </td>
+                    <td>
+
+                        <a class="btn btn-danger" href="<?= $this->url('application',
+                            ['action'=>'delete', 'id'=>$tournament->getId()]); ?>">
+                            <span class="glyphicon glyphicon-remove"></span> Delete
+                        </a>
+                    </td>
+                </tr>
+
+            <?php endforeach; ?>
+
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-striped">
+
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Created At</th>
+            </tr>
+
+            <?php foreach ($tournaments as $tournament): ?>
+
+                <tr>
+                    <td><?= $this->escapeHtml($tournament->getId()); ?></td>
+                    <td><?= $this->escapeHtml($tournament->getTitle()); ?></td>
+                    <td><?= $this->escapeHtml($tournament->getCreatedAt()); ?></td>
+                    <td>
+                        <a class="btn btn-success" href="<?= $this->url('application',
+                            ['action'=>'start', 'id'=>$tournament->getId()]); ?>">
+                            <span class="glyphicon glyphicon-star"></span> Start tournament
+                        </a>
+                    </td>
+                    <td>
+
+                        <a class="btn btn-danger" href="<?= $this->url('application',
+                            ['action'=>'delete', 'id'=>$tournament->getId()]); ?>">
+                            <span class="glyphicon glyphicon-remove"></span> Delete
+                        </a>
+                    </td>
+                </tr>
+
+            <?php endforeach; ?>
+
+        </table>
+    </div>
+</div>
+<hr>
+
+
