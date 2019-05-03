@@ -9,7 +9,6 @@ namespace Application\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Tournament\Entity\Game;
-use Tournament\Repository\GameRepository;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 

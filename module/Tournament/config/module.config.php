@@ -8,6 +8,8 @@
 namespace Tournament;
 
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Tournament\Service\Factory\TournamentManagerFactory;
+use Tournament\Service\TournamentManager;
 
 return [
     'doctrine' => [
@@ -24,4 +26,9 @@ return [
             ]
         ]
     ],
+    'service_manager' => [
+        'factories' => [
+            TournamentManager::class => TournamentManagerFactory::class
+        ]
+    ]
 ];
