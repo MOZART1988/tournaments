@@ -59,4 +59,20 @@ class IndexController extends AbstractActionController
             'tournaments' => $tournaments
         ]);
     }
+
+    public function deleteAction()
+    {
+        $id = $this->params()->fromRoute('id', -1);
+
+        $tournament = $this->entityManager->getRepository(Tournament::class)
+            ->findBy(['id' => $id]);
+
+        if ($tournament === null) {
+            $this->getResponse()->setStatusCode(404);
+        }
+
+        $this->tournamentManager->deleteTournament($id);
+
+        return $this->redirect()->toRoute('application', ['action'=>'index']);
+    }
 }

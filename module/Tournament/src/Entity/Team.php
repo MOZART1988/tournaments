@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a team in a tournament.
  * @ORM\Entity(repositoryClass="\Tournament\Repository\TeamRepository")
- * @ORM\Table(name="post")
+ * @ORM\Table(name="team")
  */
 class Team
 {
