@@ -13,10 +13,17 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a game entity in a team_tournament.
  * @ORM\Entity(repositoryClass="\Tournament\Repository\TeamTournamentRepository")
- * @ORM\Table(name="game")
+ * @ORM\Table(name="team_tournament")
  */
 class TeamTournament
 {
+    /**
+     * @ORM\Id
+     * @ORM\Column(name="id")
+     * @ORM\GeneratedValue
+     */
+    protected $id;
+
     /**
      * @ORM\Column(name="team_id")
      */
@@ -33,6 +40,24 @@ class TeamTournament
     protected $group_id;
 
     /**
+     * Returns ID
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Sets ID
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Returns $team_id.
      * @return integer
      */
@@ -45,7 +70,7 @@ class TeamTournament
      * Sets $team_id.
      * @param int $teamId
      */
-    public function setId($teamId)
+    public function setTeamId($teamId)
     {
         $this->team_id = $teamId;
     }
