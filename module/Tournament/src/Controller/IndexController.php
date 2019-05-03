@@ -38,7 +38,7 @@ class IndexController extends AbstractActionController
     {
         $id = $this->params()->fromRoute('id', -1);
 
-        $tournament = $this->entityManager->getRepository(Tournament::class)->findBy(['id' => $id]);
+        $tournament = $this->entityManager->getRepository(Tournament::class)->findOneBy(['id' => $id]);
 
         if ($tournament === null) {
             $this->getResponse()->setStatusCode(404);
@@ -48,7 +48,8 @@ class IndexController extends AbstractActionController
             'divisionOneTeams' => $this->entityManager->getRepository(TeamTournament::class)
                 ->findBy(['tournament_id' => $tournament->getId(), 'group_id' => TournamentManager::DIVISION_1]),
             'divisionTwoTeams' => $this->entityManager->getRepository(TeamTournament::class)
-                ->findBy(['tournament_id' => $tournament->getId(), 'group_id' => TournamentManager::DIVISION_2])
+                ->findBy(['tournament_id' => $tournament->getId(), 'group_id' => TournamentManager::DIVISION_2]),
+            'tournament' => $tournament,
         ]);
     }
 }

@@ -40,6 +40,12 @@ class TeamTournament
     protected $group_id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Tournament\Entity\Team", inversedBy="team")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     */
+    protected $team;
+
+    /**
      * Returns ID
      * @return integer
      */
@@ -109,5 +115,13 @@ class TeamTournament
     public function setGroupId($groupId)
     {
         $this->group_id = $groupId;
+    }
+
+    /**
+     * Returns assosiated team entity
+    */
+    public function getTeam()
+    {
+        return $this->team;
     }
 }

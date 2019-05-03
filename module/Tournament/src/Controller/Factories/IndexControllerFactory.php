@@ -6,10 +6,10 @@
  * Time: 17:57
  */
 
-namespace Application\Controller\Factories;
+namespace Tournament\Controller\Factories;
 
 
-use Application\Controller\IndexController;
+use Tournament\Controller\IndexController;
 use Interop\Container\ContainerInterface;
 use Tournament\Service\TournamentManager;
 use Zend\ServiceManager\Factory\FactoryInterface;

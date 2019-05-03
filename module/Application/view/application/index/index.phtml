@@ -52,8 +52,8 @@ $form->prepare();
             <td><?= $this->escapeHtml($tournament->getTitle()); ?></td>
             <td><?= $this->escapeHtml($tournament->getCreatedAt()); ?></td>
             <td>
-                <a class="btn btn-success" href="<?= $this->url('application',
-                    ['action'=>'start', 'id'=>$tournament->getId()]); ?>">
+                <a class="btn btn-success" href="<?= $this->url('tournament',
+                    ['action'=>'index', 'id'=>$tournament->getId()]); ?>">
                     <span class="glyphicon glyphicon-star"></span> Start tournament
                 </a>
             </td>
