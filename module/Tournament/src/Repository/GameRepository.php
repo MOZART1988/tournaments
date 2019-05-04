@@ -14,13 +14,13 @@ use Tournament\Entity\Game;
 
 class GameRepository extends EntityRepository
 {
-    public function findExists($teamId)
+    public function findExists($teamId, $versusTeamId)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         return $queryBuilder->select('g')
             ->from(Game::class, 'g')
-            ->where("g.first_team_id=$teamId")
-            ->orWhere("g.second_team_id=$teamId")->getQuery()->getResult();
+            ->where("g.first_team_id=$versusTeamId")
+            ->andWhere("g.second_team_id=$teamId")->getQuery()->getResult();
     }
 }

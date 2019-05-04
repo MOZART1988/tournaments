@@ -41,7 +41,7 @@ class GameManager
         $game = new Game();
 
         $game->setTournamentId($data['tournamentId']);
-        $game->setTitle('test');
+        $game->setTitle('game');
         $game->setCreatedAt(date('Y-m-d H:i:s'));
         $game->setStageId($stage);
         $game->setFirstTeamId($data['firstTeamId']);
@@ -88,7 +88,7 @@ class GameManager
                          */
 
                         if (!empty($this->entityManager->getRepository(Game::class)
-                            ->findExists($item->getTeamId()))) {
+                            ->findExists($item->getTeamId(), $versusTeam->getTeamId()))) {
                             continue;
                         }
 
