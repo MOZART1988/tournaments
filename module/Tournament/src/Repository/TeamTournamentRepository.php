@@ -14,16 +14,15 @@ use Tournament\Entity\TeamTournament;
 
 class TeamTournamentRepository extends EntityRepository
 {
-    public function findWinnersGroupStage($groupId)
+    public function findWinnersGroup($limit)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         return $queryBuilder->select('t')
             ->from(TeamTournament::class, 't')
-            ->where("t.group_id=$groupId")
             ->orderBy('t.final_score', 'DESC')
-            ->setMaxResults(4)
-            ->getQuery()->getResult();
+            ->setMaxResults($limit)
+            ->getQuery()->getArrayResult();
     }
 
     public function findVersusTeams($teamId, $groupId)

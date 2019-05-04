@@ -36,18 +36,26 @@ class GameManager
         $this->entityManager = $entityManager;
     }
 
-    public function addGame($data) : Game
+    public function addGame($data, $stage) : Game
     {
         $game = new Game();
 
         $game->setTournamentId($data['tournamentId']);
         $game->setTitle('test');
         $game->setCreatedAt(date('Y-m-d H:i:s'));
-        $game->setStageId($data['stageId']);
+        $game->setStageId($stage);
         $game->setFirstTeamId($data['firstTeamId']);
         $game->setSecondTeamId($data['secondTeamId']);
         $game->setFirstTeamScore(random_int(0, 10));
         $game->setSecondTeamScore(random_int(0, 10));
+        $game->setFirstTeam(
+            $this->entityManager->getRepository(Team::class)
+            ->findOneBy(['id' => $data['firstTeamId']])
+        );
+        $game->setSecondTeam(
+            $this->entityManager->getRepository(Team::class)
+                ->findOneBy(['id' => $data['secondTeamId']])
+        );
 
         $this->entityManager->persist($game);
 
@@ -56,52 +64,79 @@ class GameManager
         return $game;
     }
 
-    public function generateGameTable($tournamentId, $divisionId) : void
+    public function playGroupStage($tournamentId) : void
     {
-        $teamTournamentsStage1 = $this->entityManager->getRepository(TeamTournament::class)
-            ->findBy(['tournament_id' => $tournamentId, 'group_id' => $divisionId]);
 
-        foreach ($teamTournamentsStage1 as $item) {
-            /**
-             * @var TeamTournament $item
-             */
+        foreach (TournamentManager::$divisions as $divisionId => $divisionName) {
 
-            $versusTeams = $this->entityManager->getRepository(TeamTournament::class)
-                ->findVersusTeams($item->getTeamId(), $divisionId);
+            $teams = $this->entityManager->getRepository(TeamTournament::class)
+                ->findBy(['tournament_id' => $tournamentId, 'group_id' => $divisionId]);
+
+            foreach ($teams as $item) {
+                /**
+                 * @var TeamTournament $item
+                 */
+
+                $versusTeams = $this->entityManager->getRepository(TeamTournament::class)
+                    ->findVersusTeams($item->getTeamId(), $divisionId);
 
 
-            if (!empty($versusTeams)) {
-                foreach ($versusTeams as $versusTeam) {
-                    /**
-                     * @var TeamTournament $versusTeam
-                     */
+                if (!empty($versusTeams)) {
+                    foreach ($versusTeams as $versusTeam) {
+                        /**
+                         * @var TeamTournament $versusTeam
+                         */
 
-                    if ( $item->getTeamId() == $versusTeam->getTeamId() ) {
-                        continue;
+                        if (!empty($this->entityManager->getRepository(Game::class)
+                            ->findExists($item->getTeamId()))) {
+                            continue;
+                        }
+
+                        $data = [
+                            'tournamentId' => $tournamentId,
+                            'firstTeamId' => $item->getTeamId(),
+                            'secondTeamId' => $versusTeam->getTeamId(),
+                        ];
+
+                        $this->playGame($this->addGame($data, self::STAGE_GROUP));
                     }
 
-                    if (!empty($this->entityManager->getRepository(Game::class)
-                    ->findExists($item->getTeamId(), $versusTeam->getTeamId()))) {
-                        continue;
-                    }
-
-                    $data = [
-                        'tournamentId' => $tournamentId,
-                        'stageId' => self::STAGE_GROUP,
-                        'firstTeamId' => (int)$item->getTeamId(),
-                        'secondTeamId' => (int)$versusTeam->getTeamId(),
-                        'firstTeam' => $item,
-                        'secondTeam' => $versusTeam
-                    ];
-
-                    $this->playGame($this->addGame($data));
                 }
-
             }
         }
     }
 
-    public function playGame(Game $game)
+    public function generatePlayOffTable($tournamentId) : void
+    {
+        //GROUP STAGE
+
+        $this->playGroupStage($tournamentId);
+
+        //STAGE QUATER FINALS
+
+        $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
+            ->findWinnersGroup(8), 'team_id');
+
+        $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_QURTER_FINAL);
+
+        //STAGE SEMI FINALS
+
+        $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
+            ->findWinnersGroup(4), 'team_id');
+
+        $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_SEMI_FINAL);
+
+        //STAGE FINALS
+
+        $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
+            ->findWinnersGroup(2), 'team_id');
+
+
+        $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_FINAL);
+
+    }
+
+    public function playGame(Game $game) : void
     {
         $firstTeam = $this->entityManager->getRepository(TeamTournament::class)
         ->findOneBy(['team_id' => $game->getFirstTeamId()]);
@@ -113,22 +148,46 @@ class GameManager
          * @var TeamTournament $secondTeam
          */
 
-        if ($game->getFirstTeamScore() > $game->getSecondTeamScore()) {
-            $firstTeam->setFinalScore($firstTeam->getFinalScore() + 3);
+        if ($firstTeam !== null && $secondTeam !== null) {
+            if ($game->getFirstTeamScore() > $game->getSecondTeamScore()) {
+                $firstTeam->setFinalScore($firstTeam->getFinalScore() + 3);
+            }
+
+            if ($game->getFirstTeamScore() < $game->getSecondTeamScore()) {
+                $secondTeam->setFinalScore($secondTeam->getFinalScore() + 3);
+            }
+
+            if ($game->getFirstTeamScore() === $game->getSecondTeamScore()) {
+                $firstTeam->setFinalScore($firstTeam->getFinalScore() + 1);
+                $secondTeam->setFinalScore($secondTeam->getFinalScore() + 1);
+            }
+
+            $this->entityManager->persist($firstTeam);
+            $this->entityManager->persist($secondTeam);
+
+            $this->entityManager->flush();
+        }
+    }
+
+    public function generatePlayOffGames($tournamentId, $teamsIds, $startStage)
+    {
+        if (empty($teamsIds)) {
+            return false;
         }
 
-        if ($game->getFirstTeamScore() < $game->getSecondTeamScore()) {
-            $secondTeam->setFinalScore($secondTeam->getFinalScore() + 3);
-        }
+        $data = [
+            'tournamentId' => $tournamentId,
+            'firstTeamId' => reset($teamsIds),
+            'secondTeamId' => end($teamsIds),
+        ];
 
-        if ($game->getFirstTeamScore() === $game->getSecondTeamScore()) {
-            $firstTeam->setFinalScore($firstTeam->getFinalScore() + 1);
-            $secondTeam->setFinalScore($secondTeam->getFinalScore() + 1);
-        }
+        reset($teamsIds);
+        unset ($teamsIds[key($teamsIds)]);
+        end($teamsIds);
+        unset($teamsIds[key($teamsIds)]);
 
-        $this->entityManager->persist($firstTeam);
-        $this->entityManager->persist($secondTeam);
+        $this->playGame($this->addGame($data, $startStage));
 
-        $this->entityManager->flush();
+        return $this->generatePlayOffGames($tournamentId, $teamsIds, $startStage);
     }
 }

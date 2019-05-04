@@ -10,6 +10,7 @@ namespace Tournament\Service;
 
 
 use Doctrine\ORM\EntityManager;
+use Tournament\Entity\Game;
 use Tournament\Entity\Team;
 use Tournament\Entity\TeamTournament;
 use Tournament\Entity\Tournament;
@@ -111,6 +112,13 @@ class TournamentManager
 
             foreach ($tournamentTeams as $tournamentTeam) {
                 $this->entityManager->remove($tournamentTeam);
+            }
+
+            $tournamentGames = $this->entityManager->getRepository(Game::class)
+                ->findBy(['tournament_id' => $tournament->getId()]);
+
+            foreach ($tournamentGames as $game) {
+                $this->entityManager->remove($game);
             }
 
             $this->entityManager->remove($tournament);

@@ -10,6 +10,7 @@ namespace Tournament\Controller;
 
 
 use Doctrine\ORM\EntityManager;
+use Tournament\Entity\Game;
 use Tournament\Entity\TeamTournament;
 use Tournament\Entity\Tournament;
 use Tournament\Service\GameManager;
@@ -24,11 +25,6 @@ class IndexController extends AbstractActionController
      */
     private $entityManager;
 
-    /**
-     * @var TournamentManager
-     */
-    private $tournamentManager;
-
 
     /**
      * @var GameManager $gameManager
@@ -36,10 +32,9 @@ class IndexController extends AbstractActionController
 
     private $gameManager;
 
-    public function __construct(EntityManager $entityManager, TournamentManager $tournamentManager, GameManager $gameManager)
+    public function __construct(EntityManager $entityManager, GameManager $gameManager)
     {
         $this->entityManager = $entityManager;
-        $this->tournamentManager = $tournamentManager;
         $this->gameManager = $gameManager;
     }
 
@@ -62,14 +57,28 @@ class IndexController extends AbstractActionController
         ]);
     }
 
-    public function startAction()
+    public function tableAction()
     {
         $id = $this->params()->fromRoute('id', -1);
 
-        $this->gameManager->generateGameTable($id, 1);
-        $this->gameManager->generateGameTable($id, 2);
+        $this->gameManager->generatePlayOffTable($id);
 
-        echo 1;
-        die;
+        $groupOneGames = $this->entityManager->getRepository(Game::class)
+            ->findBy(['tournament_id' => $id, 'stage_id' => GameManager::STAGE_GROUP]);
+        $groupTwoGames = $this->entityManager->getRepository(Game::class)
+            ->findBy(['tournament_id' => $id, 'stage_id' => GameManager::STAGE_QURTER_FINAL]);
+        $groupThreeGames = $this->entityManager->getRepository(Game::class)
+            ->findBy(['tournament_id' => $id, 'stage_id' => GameManager::STAGE_SEMI_FINAL]);
+        $groupFinalGames = $this->entityManager->getRepository(Game::class)
+            ->findBy(['tournament_id' => $id, 'stage_id' => GameManager::STAGE_FINAL]);
+
+        return new ViewModel([
+            'groupOneGames' => $groupOneGames,
+            'groupTwoGames' => $groupTwoGames,
+            'groupThreeGames' => $groupThreeGames,
+            'groupFinalGames' => $groupFinalGames,
+            'tournament' => $this->entityManager->getRepository(Tournament::class)
+            ->findOneBy(['id' => $id])
+        ]);
     }
 }

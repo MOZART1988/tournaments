@@ -65,6 +65,19 @@ class Game
     protected $stage_id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Tournament\Entity\Team", inversedBy="team")
+     * @ORM\JoinColumn(name="first_team_id", referencedColumnName="id")
+     */
+    protected $firstTeam = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tournament\Entity\Team", inversedBy="team")
+     * @ORM\JoinColumn(name="second_team_id", referencedColumnName="id")
+     */
+    protected $secondTeam = null;
+
+
+    /**
      * Returns ID of this team.
      * @return integer
      */
@@ -224,6 +237,40 @@ class Game
     public function setSecondTeamScore($secondTeamScore)
     {
         $this->second_team_score = $secondTeamScore;
+    }
+
+    /**
+     * Returns assosiated team entity
+     */
+    public function getFirstTeam()
+    {
+        return $this->firstTeam;
+    }
+
+    /**
+     * Sets associated team.
+     * @param Team $team
+     */
+    public function setFirstTeam($team)
+    {
+        $this->firstTeam = $team;
+    }
+
+    /**
+     * Returns assosiated team entity
+     */
+    public function getSecondTeam()
+    {
+        return $this->secondTeam;
+    }
+
+    /**
+     * Sets associated team.
+     * @param Team $team
+     */
+    public function setSecondTeam($team)
+    {
+        $this->secondTeam = $team;
     }
 
 }

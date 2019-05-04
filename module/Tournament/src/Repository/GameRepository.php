@@ -14,7 +14,7 @@ use Tournament\Entity\Game;
 
 class GameRepository extends EntityRepository
 {
-    public function findExists($teamId, $versusTeamId)
+    public function findExists($teamId)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
