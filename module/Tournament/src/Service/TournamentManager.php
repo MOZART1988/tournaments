@@ -10,6 +10,7 @@ namespace Tournament\Service;
 
 
 use Doctrine\ORM\EntityManager;
+use Tournament\Entity\Game;
 use Tournament\Entity\Team;
 use Tournament\Entity\TeamTournament;
 use Tournament\Entity\Tournament;
@@ -17,20 +18,17 @@ use Tournament\Entity\Tournament;
 class TournamentManager
 {
     /**
-     * List of Groups
-     * @var array $groups
+     * List of Divisions
+     * @var array $divisions
     */
 
-    const GROUP_A = 1;
-    const GROUP_B = 2;
-    const GROUP_C = 3;
-    const GROUP_D = 4;
+    const DIVISION_1 = 1;
+    const DIVISION_2 = 2;
 
-    public static $groups = [
-        self::GROUP_A => 'А',
-        self::GROUP_B => 'B',
-        self::GROUP_C => 'C',
-        self::GROUP_D => 'D'
+
+    public static $divisions = [
+        self::DIVISION_1 => 'Upper division',
+        self::DIVISION_2 => 'Lower division'
     ];
 
     /**
@@ -77,9 +75,9 @@ class TournamentManager
 
 
             $this->entityManager->persist($team);
-
-            $this->entityManager->flush();
         }
+
+        $this->entityManager->flush();
     }
 
 
@@ -90,12 +88,15 @@ class TournamentManager
         $tournament->setCreatedAt(date('Y-m-d H:i:s'));
 
         $this->entityManager->persist($tournament);
-
         $this->entityManager->flush();
 
         if (!$this->entityManager->getRepository(Team::class)->findBy([])) {
             $this->generateTeams(self::$teams);
         }
+
+        $this->generateDivisions($tournament->getId());
+
+
 
     }
 
@@ -105,8 +106,65 @@ class TournamentManager
             ->findOneBy(['id' => $id]);
 
         if ($tournament) {
+
+            $tournamentTeams = $this->entityManager->getRepository(TeamTournament::class)
+                ->findBy(['tournament_id' => $tournament->getId()]);
+
+            foreach ($tournamentTeams as $tournamentTeam) {
+                $this->entityManager->remove($tournamentTeam);
+            }
+
+            $tournamentGames = $this->entityManager->getRepository(Game::class)
+                ->findBy(['tournament_id' => $tournament->getId()]);
+
+            foreach ($tournamentGames as $game) {
+                $this->entityManager->remove($game);
+            }
+
             $this->entityManager->remove($tournament);
-            $this->entityManager->flush();
         }
+
+        $this->entityManager->flush();
+    }
+
+    public function generateDivisions($tournamentId)
+    {
+        $teams = $this->entityManager->getRepository(Team::class)->findAll();
+
+        $result = [];
+
+        foreach ($teams as $team) {
+            $result[] = $team;
+        }
+
+        shuffle($result);
+
+
+        $counter = 1;
+        $currentGroup = self::DIVISION_1;
+
+        foreach ($result as $team) {
+
+            $teamTournament = new TeamTournament();
+
+            $teamTournament->setTeamId($team->getId());
+
+            $teamTournament->setGroupId($currentGroup);
+            $teamTournament->setTournamentId($tournamentId);
+            $teamTournament->setFinalScore(0);
+            $teamTournament->setTeam($team);
+
+            $this->entityManager->persist($teamTournament);
+
+            if ($counter % 8 === 0) {
+                $currentGroup++;
+            }
+
+            $counter++;
+
+
+        }
+
+        $this->entityManager->flush();
     }
 }

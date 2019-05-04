@@ -40,6 +40,17 @@ class TeamTournament
     protected $group_id;
 
     /**
+     * @ORM\Column(name="final_score")
+     */
+    protected $final_score;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tournament\Entity\Team", inversedBy="team")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+     */
+    protected $team = null;
+
+    /**
      * Returns ID
      * @return integer
      */
@@ -109,5 +120,40 @@ class TeamTournament
     public function setGroupId($groupId)
     {
         $this->group_id = $groupId;
+    }
+
+    /**
+     * Returns assosiated team entity
+    */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * Sets associated team.
+     * @param Team $team
+     */
+    public function setTeam($team)
+    {
+        $this->team = $team;
+    }
+
+    /**
+     * Returns $final_score.
+     * @return $integer
+     */
+    public function getFinalScore()
+    {
+        return $this->final_score;
+    }
+
+    /**
+     * Sets $final_score.
+     * @param integer $finalScore
+     */
+    public function setFinalScore($finalScore)
+    {
+        $this->final_score = $finalScore;
     }
 }

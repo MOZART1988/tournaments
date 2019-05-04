@@ -9,6 +9,7 @@ namespace Application\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Tournament\Entity\Game;
+use Tournament\Entity\Team;
 use Tournament\Entity\Tournament;
 use Tournament\Form\AddTournamentForm;
 use Tournament\Service\TournamentManager;

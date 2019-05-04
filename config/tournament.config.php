@@ -6,7 +6,6 @@
  * @see https://docs.zendframework.com/tutorials/advanced-config/#environment-specific-application-configuration
  */
 return [
-    // Retrieve list of modules used in this application.
     'modules' => require __DIR__ . '/modules.config.php',
 
     'module_listener_options' => [
@@ -32,7 +31,7 @@ return [
         'config_cache_enabled' => true,
 
         // The key used to create the configuration cache file name.
-        'config_cache_key' => 'application.config.cache',
+        'config_cache_key' => 'tournament.config.cache',
 
         // Whether or not to enable a module class map cache.
         // If enabled, creates a module class map cache which will be used
@@ -40,7 +39,7 @@ return [
         'module_map_cache_enabled' => true,
 
         // The key used to create the class map cache file name.
-        'module_map_cache_key' => 'application.module.cache',
+        'module_map_cache_key' => 'tournament.module.cache',
 
         // The path in which to cache merged configuration.
         'cache_dir' => 'data/cache/',

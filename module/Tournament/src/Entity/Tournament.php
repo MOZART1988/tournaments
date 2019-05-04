@@ -8,6 +8,7 @@
 
 namespace Tournament\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,6 +34,21 @@ class Tournament
      * @ORM\Column(name="created_at")
      */
     protected $created_at;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Tournament\Entity\TeamTournament", mappedBy="tournament")
+     * @ORM\JoinColumn(name="id", referencedColumnName="team_id")
+     */
+    protected $teamTournaments;
+
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->teamTournaments = new ArrayCollection();
+    }
 
     /**
      * Returns ID of this team.
@@ -86,5 +102,14 @@ class Tournament
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
+    }
+
+    /**
+     * Returns the array collection of TeamTournaments entities
+     * @return string
+     */
+    public function getTeamTournaments()
+    {
+        return $this->teamTournaments;
     }
 }

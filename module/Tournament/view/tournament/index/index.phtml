@@ -1,0 +1,56 @@
+<?php
+/**
+ * @var \Tournament\Entity\TeamTournament[] $divisionOneTeams
+ * @var \Tournament\Entity\TeamTournament[] $divisionTwoTeams
+ * @var \Tournament\Entity\Tournament $tournament
+*/
+
+
+
+?>
+
+<h1>Tournament <?=$tournament->getTitle()?></h1>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-striped">
+
+            <tr>
+                <th>Division 1</th>
+            </tr>
+
+            <?php foreach ($divisionOneTeams as $item): ?>
+                <tr>
+                    <td><?= $this->escapeHtml($item->getTeam()->getTitle()); ?></td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-striped">
+
+            <tr>
+                <th>Division 2</th>
+            </tr>
+
+            <?php foreach ($divisionTwoTeams as $item2): ?>
+                <tr>
+                    <td><?= $this->escapeHtml($item2->getTeam()->getTitle()); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <a class="btn btn-info" href="<?= $this->url('tournament',
+            ['action'=>'table', 'id'=>$tournament->getId()]); ?>">
+            <span class="glyphicon glyphicon-stats"></span> Go
+        </a>
+    </div>
+</div>
+
+
+

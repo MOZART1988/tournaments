@@ -1,0 +1,107 @@
+<?php
+/**
+ * @var \Tournament\Entity\Game[] $groupOneGames
+ * @var \Tournament\Entity\Game[] $groupTwoGames
+ * @var \Tournament\Entity\Game[] $groupThreeGames
+ * @var \Tournament\Entity\Game[] $groupFinalGames
+ * @var \Tournament\Entity\Tournament $tournament
+ */
+
+
+
+?>
+
+<h1>Tournament <?=$tournament->getTitle()?></h1>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-striped">
+
+            <tr>
+                <th>GROUP STAGE</th>
+            </tr>
+
+            <?php foreach ($groupOneGames as $item): ?>
+                <tr>
+                    <td>
+                        <?= $this->escapeHtml($item->getFirstTeam()->getTitle()); ?>
+                        VS
+                        <?= $this->escapeHtml($item->getSecondTeam()->getTitle())?>
+
+                        (<?=$item->getFirstTeamScore()?> : <?=$item->getSecondTeamScore()?>)
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-striped">
+
+            <tr>
+                <th>QUATER FINALS</th>
+            </tr>
+
+            <?php foreach ($groupTwoGames as $item): ?>
+                <tr>
+                    <td>
+                        <?= $this->escapeHtml($item->getFirstTeam()->getTitle()); ?>
+                        VS
+                        <?= $this->escapeHtml($item->getSecondTeam()->getTitle())?>
+
+                        (<?=$item->getFirstTeamScore()?> : <?=$item->getSecondTeamScore()?>)
+                    </td>
+                </tr>
+
+            <?php endforeach; ?>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-striped">
+
+            <tr>
+                <th>SEMI FINALS</th>
+            </tr>
+
+            <?php foreach ($groupThreeGames as $item): ?>
+                <tr>
+                    <td>
+                        <?= $this->escapeHtml($item->getFirstTeam()->getTitle()); ?>
+                        VS
+                        <?= $this->escapeHtml($item->getSecondTeam()->getTitle())?>
+
+                        (<?=$item->getFirstTeamScore()?> : <?=$item->getSecondTeamScore()?>)
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-striped">
+
+            <tr>
+                <th>FINALS</th>
+            </tr>
+
+            <?php foreach ($groupFinalGames as $item): ?>
+                <tr>
+                    <td>
+                        <?= $this->escapeHtml($item->getFirstTeam()->getTitle()); ?>
+                        VS
+                        <?= $this->escapeHtml($item->getSecondTeam()->getTitle())?>
+
+                        (<?=$item->getFirstTeamScore()?> : <?=$item->getSecondTeamScore()?>)
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+</div>
+
+
+

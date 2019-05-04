@@ -35,6 +35,49 @@ class Game
     protected $created_at;
 
     /**
+     * @ORM\Column(name="tournament_id")
+     */
+    protected $tournament_id;
+
+    /**
+     * @ORM\Column(name="first_team_id")
+     */
+    protected $first_team_id;
+
+    /**
+     * @ORM\Column(name="second_team_id")
+     */
+    protected $second_team_id;
+
+    /**
+     * @ORM\Column(name="first_team_score")
+     */
+    protected $first_team_score;
+
+    /**
+     * @ORM\Column(name="second_team_score")
+     */
+    protected $second_team_score;
+
+    /**
+     * @ORM\Column(name="stage_id")
+     */
+    protected $stage_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tournament\Entity\Team", inversedBy="team")
+     * @ORM\JoinColumn(name="first_team_id", referencedColumnName="id")
+     */
+    protected $firstTeam = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tournament\Entity\Team", inversedBy="team")
+     * @ORM\JoinColumn(name="second_team_id", referencedColumnName="id")
+     */
+    protected $secondTeam = null;
+
+
+    /**
      * Returns ID of this team.
      * @return integer
      */
@@ -87,4 +130,147 @@ class Game
     {
         $this->created_at = $created_at;
     }
+
+    /**
+     * Returns $tournament_id.
+     * @return integer $tournament_id
+     */
+    public function getTournamentId()
+    {
+        return $this->tournament_id;
+    }
+
+    /**
+     * Sets tournament_id.
+     * @param integer $tournamentId
+     */
+    public function setTournamentId($tournamentId)
+    {
+        $this->tournament_id = $tournamentId;
+    }
+
+    /**
+     * Returns $first_team_id.
+     * @return integer $first_team_id
+     */
+    public function getFirstTeamId()
+    {
+        return $this->first_team_id;
+    }
+
+    /**
+     * Sets $first_team_id.
+     * @param integer $firstTeamId
+     */
+    public function setFirstTeamId($firstTeamId)
+    {
+        $this->first_team_id = $firstTeamId;
+    }
+
+    /**
+     * Returns $second_team_id.
+     * @return integer $second_team_id
+     */
+    public function getSecondTeamId()
+    {
+        return $this->second_team_id;
+    }
+
+    /**
+     * Sets $second_team_id.
+     * @param integer $secondTeamId
+     */
+    public function setSecondTeamId($secondTeamId)
+    {
+        $this->second_team_id = $secondTeamId;
+    }
+
+    /**
+     * Returns $stage_id.
+     * @return integer $stage_id
+     */
+    public function getStageId()
+    {
+        return $this->stage_id;
+    }
+
+    /**
+     * Sets $stage_id.
+     * @param integer $stageId
+     */
+    public function setStageId($stageId)
+    {
+        $this->stage_id = $stageId;
+    }
+
+    /**
+     * Returns $first_team_score.
+     * @return integer $first_team_score
+     */
+    public function getFirstTeamScore()
+    {
+        return $this->first_team_score;
+    }
+
+    /**
+     * Sets $first_team_score.
+     * @param integer $firstTeamScore
+     */
+    public function setFirstTeamScore($firstTeamScore)
+    {
+        $this->first_team_score = $firstTeamScore;
+    }
+
+    /**
+     * Returns $second_team_score.
+     * @return integer $second_team_score
+     */
+    public function getSecondTeamScore()
+    {
+        return $this->second_team_score;
+    }
+
+    /**
+     * Sets $second_team_score.
+     * @param integer $secondTeamScore
+     */
+    public function setSecondTeamScore($secondTeamScore)
+    {
+        $this->second_team_score = $secondTeamScore;
+    }
+
+    /**
+     * Returns assosiated team entity
+     */
+    public function getFirstTeam()
+    {
+        return $this->firstTeam;
+    }
+
+    /**
+     * Sets associated team.
+     * @param Team $team
+     */
+    public function setFirstTeam($team)
+    {
+        $this->firstTeam = $team;
+    }
+
+    /**
+     * Returns assosiated team entity
+     */
+    public function getSecondTeam()
+    {
+        return $this->secondTeam;
+    }
+
+    /**
+     * Sets associated team.
+     * @param Team $team
+     */
+    public function setSecondTeam($team)
+    {
+        $this->secondTeam = $team;
+    }
+
 }
