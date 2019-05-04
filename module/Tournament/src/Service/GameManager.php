@@ -108,31 +108,45 @@ class GameManager
 
     public function generatePlayOffTable($tournamentId) : void
     {
-        //GROUP STAGE
 
-        $this->playGroupStage($tournamentId);
+        if (!$this->entityManager->getRepository(Game::class)
+        ->findOneBy(['tournament_id' => $tournamentId, 'stage_id' => self::STAGE_FINAL])) {
 
-        //STAGE QUATER FINALS
+            $games = $this->entityManager->getRepository(Game::class)
+                ->findBy(['tournament_id' => $tournamentId]);
 
-        $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
-            ->findWinnersGroup(8), 'team_id');
+            foreach ($games as $game) {
+                $this->entityManager->remove($game);
+            }
 
-        $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_QURTER_FINAL);
+            $this->entityManager->flush();
 
-        //STAGE SEMI FINALS
+            //GROUP STAGE
 
-        $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
-            ->findWinnersGroup(4), 'team_id');
+            $this->playGroupStage($tournamentId);
 
-        $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_SEMI_FINAL);
+            //STAGE QUATER FINALS
 
-        //STAGE FINALS
+            $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
+                ->findWinnersGroup(8), 'team_id');
 
-        $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
-            ->findWinnersGroup(2), 'team_id');
+            $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_QURTER_FINAL);
+
+            //STAGE SEMI FINALS
+
+            $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
+                ->findWinnersGroup(4), 'team_id');
+
+            $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_SEMI_FINAL);
+
+            //STAGE FINALS
+
+            $teams = array_column($this->entityManager->getRepository(TeamTournament::class)
+                ->findWinnersGroup(2), 'team_id');
 
 
-        $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_FINAL);
+            $this->generatePlayOffGames($tournamentId, $teams, self::STAGE_FINAL);
+        }
 
     }
 
